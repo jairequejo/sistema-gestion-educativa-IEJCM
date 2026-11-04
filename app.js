@@ -25,7 +25,7 @@ function commit(fn){const copy=structuredClone(data);const result=fn(copy);save(
 function toast(s){$('#toast').textContent=s;$('#toast').classList.add('visible');clearTimeout(toast.timer);toast.timer=setTimeout(()=>$('#toast').classList.remove('visible'),3500);}
 function nav(active){return [['home','Inicio','home'],['matricula','Matrícula','list'],['docentes','Docentes','calendar'],['reportes','Reportes','list']].map(([id,label,ico])=>`<a href="#${id}" class="${active===id?'active':''}" ${active===id?'aria-current="page"':''}>${icon(ico)}${label}</a>`).join('');}
 function layout(title,group,body,back='home',active='home',wide=false){document.title=title+' | JCM';app.innerHTML=`<div class="app-layout"><aside class="sidebar"><div class="brand">${logo()}<strong>I.E. José Carlos<br>Mariátegui</strong></div>${nav(active)}<a href="#salir" class="exit">${icon('exit')}Cerrar sesión</a></aside><main class="work-area"><header class="app-header">${logo()}<div><strong>I.E. José Carlos Mariátegui</strong><small>Sistema de gestión educativa</small></div></header><a class="breadcrumb" href="#${back}">${icon('back')}${group}</a><div class="page-title"><h1 tabindex="-1">${title}</h1></div><div class="content ${wide?'wide':''}">${message?notice(message,true):''}${body}</div></main><nav class="bottom-nav" aria-label="Navegación principal">${nav(active).replaceAll(/<svg[\s\S]*?<\/svg>/g,'')}</nav></div>`;}
-function login(){document.title='Iniciar sesión | JCM';app.innerHTML=`<main class="login-page"><section class="login-canvas" aria-label="Acceso institucional"><div class="desktop-photo" aria-hidden="true"><img src="./assets/login-referencia.png" alt=""></div><i class="login-decoration top" aria-hidden="true"></i><i class="login-decoration bottom" aria-hidden="true"></i><article class="login-card ${message?'has-error':''}">${logo()}<p class="school-name">I.E. José Carlos Mariátegui</p><h1>Iniciar sesión</h1><form id="login" novalidate><label class="field"><span>Usuario</span><div class="login-input">${icon('person')}<input name="username" autocomplete="username" placeholder="Ingrese su usuario" required></div></label><label class="field"><span>Contraseña</span><div class="login-input">${icon('lock')}<input name="password" type="password" autocomplete="current-password" placeholder="Ingrese su contraseña" required><button class="eye" type="button" data-action="eye" aria-label="Mostrar contraseña" aria-pressed="false">${icon('eye')}</button></div></label>${primary('INGRESAR')}<p class="login-help">Ingrese sus credenciales institucionales</p>${message?`<div class="login-error" role="alert">${esc(message)}</div>`:''}</form></article><footer class="login-footer">Sistema de gestión educativa</footer></section><details class="login-demo"><summary>Datos para probar la demostración</summary><p>Usuario: <b>docente@jcm.edu.pe</b><br>Contraseña: <b>Demo2026</b></p><button type="button" data-action="demo">Completar datos demo</button><p>Prototipo académico. Los registros se guardan solamente en este navegador.</p></details></main>`;}
+function login(){document.title='Iniciar sesión | JCM';app.innerHTML=`<main class="login-page"><section class="login-canvas" aria-label="Acceso institucional"><div class="desktop-photo" aria-hidden="true"><svg class="photo-curves" viewBox="0 0 100 100" preserveAspectRatio="none"><defs><clipPath id="school-photo-clip" clipPathUnits="objectBoundingBox"><path d="M0 0H.70C.99 .28 .99 .66 .65 1H0Z"/></clipPath></defs><path fill="#1e5a3c" d="M0 0H.91C1.08 .35 1.02 .73 .72 1H0Z" transform="scale(100 1)"/><path fill="#e8a317" d="M0 0H70C99 28 99 66 65 100H0Z"/></svg><img class="school-photo" src="./assets/colegio.jpg" alt=""></div><i class="login-decoration top" aria-hidden="true"></i><i class="login-decoration bottom" aria-hidden="true"></i><article class="login-card ${message?'has-error':''}">${logo()}<p class="school-name">I.E. José Carlos Mariátegui</p><h1>Iniciar sesión</h1><form id="login" novalidate><label class="field"><span>Usuario</span><div class="login-input">${icon('person')}<input name="username" autocomplete="username" placeholder="Ingrese su usuario" required></div></label><label class="field"><span>Contraseña</span><div class="login-input">${icon('lock')}<input name="password" type="password" autocomplete="current-password" placeholder="Ingrese su contraseña" required><button class="eye" type="button" data-action="eye" aria-label="Mostrar contraseña" aria-pressed="false">${icon('eye')}</button></div></label>${primary('INGRESAR')}<p class="login-help">Ingrese sus credenciales institucionales</p>${message?`<div class="login-error" role="alert">${esc(message)}</div>`:''}</form></article><footer class="login-footer">Sistema de gestión educativa</footer></section><details class="login-demo"><summary>Datos para probar la demostración</summary><p>Usuario: <b>docente@jcm.edu.pe</b><br>Contraseña: <b>Demo2026</b></p><button type="button" data-action="demo">Completar datos demo</button><p>Prototipo académico. Los registros se guardan solamente en este navegador.</p></details></main>`;}
 function route(){return location.hash.slice(1)||'login';}
 function render(){let r=route();if(!logged&&!['login','fin'].includes(r)){history.replaceState(null,'','#login');r='login';}if(r==='login'){login();return;}if(r==='fin'){app.innerHTML=`<main class="screen-end">${logo()}<h1>Sesión finalizada</h1><p>Ha salido del sistema de gestión educativa de forma correcta.</p>${link('Volver a iniciar sesión','login',false)}</main>`;return;}
 let body='',title='',group='Matrícula',back='matricula',active='matricula';
@@ -95,3 +95,44 @@ case 'attendance-report':{query.from=v.from;query.to=reportMode==='daily'?v.from
 window.addEventListener('hashchange',()=>{message='';errors={};render();window.scrollTo(0,0);});
 render();
 
+/* Small contextual improvements layered onto the academic prototype. */
+function improveExperience(){
+  const photo=document.querySelector('.desktop-photo');
+  if(photo&&!photo.querySelector('.login-visual-copy')){
+    const copy=document.createElement('div');
+    copy.className='login-visual-copy';
+    copy.innerHTML='<p>Gestión educativa</p><h2>Todo lo importante,<br>en un solo lugar.</h2><span>Matrícula · Docentes · Reportes</span>';
+    photo.append(copy);
+  }
+  const content=document.querySelector('.content');
+  const heading=document.querySelector('.page-title h1');
+  if(!content||!heading)return;
+  if(heading.textContent.trim()==='Página principal'&&!content.querySelector('.quick-start-panel')){
+    const menu=content.querySelector('.menu-list');
+    const title=content.querySelector('h2');
+    const intro=content.querySelector('.intro');
+    if(title)title.textContent='Gestiones principales';
+    if(intro)intro.textContent='Seleccione un módulo o comience con una tarea frecuente.';
+    if(menu){
+      const pending=data.students.filter(student=>!student.grade).length;
+      const attended=data.attendance.filter(entry=>entry.date===today()&&entry.status==='Asistencia').length;
+      const panel=document.createElement('section');
+      panel.className='quick-start-panel';
+      panel.setAttribute('aria-label','Accesos rápidos y resumen institucional');
+      panel.innerHTML='<p class="eyebrow">Panel de trabajo</p><h2>¿Qué desea hacer hoy?</h2><p>Acceda de inmediato a las tareas de uso más frecuente.</p><div class="quick-actions"><a class="primary" href="#estudiante">Nueva matrícula</a><a class="secondary" href="#elegir-asistencia">Registrar asistencia</a></div><div class="dashboard-stats"><article><strong>'+data.students.length+'</strong><span>Estudiantes registrados</span></article><article><strong>'+pending+'</strong><span>Por asignar</span></article><article><strong>'+attended+'/'+data.teachers.length+'</strong><span>Asistencia de hoy</span></article></div>';
+      content.insertBefore(panel,menu);
+    }
+  }
+  const step=content.querySelector('.step');
+  if(step&&!content.querySelector('.step-progress')&&/Paso [12] de 2/.test(step.textContent)){
+    const progress=document.createElement('div');
+    const complete=step.textContent.includes('Paso 2');
+    progress.className='step-progress';
+    progress.setAttribute('aria-label',step.textContent.trim());
+    progress.innerHTML='<div><span>Registro de estudiante</span><strong>'+step.textContent.trim()+'</strong></div><div class="progress-track"><i style="width:'+(complete?'100':'50')+'%"></i></div><small>'+ (complete?'Datos complementarios':'Datos personales') +'</small>';
+    step.replaceWith(progress);
+  }
+}
+const experienceObserver=new MutationObserver(()=>window.requestAnimationFrame(improveExperience));
+experienceObserver.observe(app,{childList:true});
+improveExperience();
