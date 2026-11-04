@@ -5,3 +5,6 @@
 /* Keep every screen aligned to a predictable, responsive content margin. */
 .app-layout{width:100%;max-width:none}.work-area{width:100%;max-width:1180px;margin-inline:auto;padding:clamp(28px,4vw,48px) clamp(24px,5vw,72px) clamp(56px,7vw,88px)}.content{max-width:720px}.content.wide{max-width:100%}
 @media (min-width:701px) and (max-width:980px){.app-layout{grid-template-columns:210px minmax(0,1fr)}.sidebar{padding-inline:16px}.work-area{padding-inline:clamp(28px,4vw,44px)}}@media(max-width:700px){.work-area{width:100%;max-width:520px;margin-inline:auto;padding:28px 24px calc(108px + env(safe-area-inset-bottom))}}@media(max-width:380px){.work-area{padding-inline:18px}}
+
+/* Desktop content follows the sidebar instead of being centred in the viewport. */
+@media(min-width:701px){.work-area{max-width:none;margin:0;padding:34px clamp(32px,4vw,68px) 72px}.content{max-width:720px}.content:has(.menu-list),.content:has(.quick-start-panel){max-width:1040px}}
